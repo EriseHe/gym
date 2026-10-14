@@ -1,26 +1,12 @@
-# FORM / gym — Project requirements for Codex or Work
+# FORM / gym — requirements
 
-## Product intent
-- Build a polished, independently designed, mobile-first Chinese dumbbell training website for the `EriseHe/gym` **standalone** repository.
-- Deploy it to `https://erisehe.github.io/gym/` using this repository's GitHub Actions workflow.
-- The existing `EriseHe/trip` project is relevant **only** as the deployment URL pattern. Do not import its code, CSS, modules or visual style.
-- User explicitly rejects line-drawn stick figures and abstract exercise diagrams. Exercise tutorials must use photographs of real people or clearly identified real-person videos.
-
-## Source media
-- 12 exercises map to genuine two-frame photographs in yuhonas/free-exercise-db, Unlicense. Do not substitute photographs of the wrong exercise.
-- Serratus punch links to real-person Wikimedia Commons footage by Buidhe under CC BY-SA 4.0; maintain attribution.
-- Some photo sets use a bench or platform whereas the at-home instructions adapt to floor/wall-only; preserve clearly marked variation notes and do not silently claim exact equivalence.
-- The GitHub Pages workflow runs `scripts/vendor_photos.py` to vendor the public-domain photos into `site/photos/` before deployment. The ZIP stays small without bundled binaries.
-
-## Safety/privacy
-- Plan is an educational, conservative strength and movement program, not a diagnosed treatment for shoulder or foot alignment.
-- Use low starting loads; avoid claims that the user's shoulder-blade asymmetry and outward foot progression have a proven single root cause.
-- Do NOT commit private posture videos, personal images, medical records or identifiable user information to the public repository.
-- Client-only progress tracking is localStorage. No analytics or external account data.
-
-## Engineering
-- Static HTML, CSS and vanilla JavaScript in `site/`, no build tools required.
-- Full mobile and desktop layouts; keyboard navigation and accessible controls.
-- Smoke test: `python tests/test_ui.py` with Playwright/Chromium installed.
-- `.github/workflows/pages.yml` uploads only `site/` to Pages.
-- Keep public URL `https://erisehe.github.io/gym/` independent of other repositories; the previous `erisehe.github.io/public/gym/` site should only be retired after this site's deployment is verified.
+- Standalone Chinese workout website, not a trip theme or module. Do not import trip code.
+- Current app: site/data.js (legacy exercise media), site/plan.js (v3 programming), site/training.js and site/training.css, site/index.html. Old app.js is no longer loaded.
+- Real exercise photographs and real-person video only; no stick figures or generated demonstration photos. Disclose photo/home-variation differences prominently. New lunge is a forward lunge, not a reverse lunge or rear-foot-elevated split squat.
+- v3 schedule: four strength days, two easy aerobic days, one rest day; third run is optional in develop phase. Specific stage/sets are a plan, not a clinically validated prescription.
+- Stage escalation requires an explicit readiness confirmation; never silently increase load by date. Keep scapular-control exercises low-fatigue. Provide reduction/stopping pathways.
+- No claims of a proven shoulder-to-foot diagnostic chain. No forced toe-angle correction. Do not upload private posture photos, videos or medical records.
+- Preserve legacy form-gym-v2 localStorage without mutation. v3 has a separate storage key and export includes both. No analytics or remote personal-data writes.
+- scripts/vendor_photos.py vendors exact photos from both data.js and plan.js before deployment. Keep source/media attribution.
+- Tests: node tests/test_program.js; python tests/test_v3.py (Playwright/Chromium). Default UI test simulates storage offline; GYM_BASE enables real origin testing.
+- Hosting currently uses the existing erisehe.github.io workflow, which checks out this independent repository. Verify actual public deployment, not just source commit success. Leave trip untouched.

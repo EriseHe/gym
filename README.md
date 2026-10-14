@@ -1,56 +1,33 @@
-# FORM — 中文哑铃健身训练手册
+# FORM v3 — 力量与心肺训练计划
 
-独立、从零设计的静态健身网站，使用真人动作摄影与中文教学，兼容 iPhone 和桌面浏览器。
+独立项目：`EriseHe/gym`。地址：<https://erisehe.github.io/gym/>。不使用 trip 的代码、模块或风格。
 
-## 功能
-- 7 天训练计划：周一、周五肩臂，周三下肢核心，周二/周四轻量恢复；周末轻活动与休息。
-- 13 个动作的中文分步教学，真实人物示范摄影（起止两张），前锯肌专项练习为 CC 授权真人视频。
-- 每组完成记录、组间休息计时器、个人重量笔记、训练阶段与训练历史（浏览器本地保存）。
-- 8 周递进计划，阶段可手动修改；安全提醒、动作错误示例与媒体来源说明。
-- 原生 HTML/CSS/JavaScript，无构建或服务器依赖。
+## 本版
+- 周一上肢 A，周二下肢 A，周三轻松跑，周四上肢 B，周五下肢 B，周六较长轻松跑，周日休息。
+- 重新适应、稳定训练、重点发展、减量巩固四阶段；不会按日期自动提高负荷。发展期第三跑需主动启用。
+- 每动作独立组数，主项与低疲劳肩胛练习分开，含实际有氧分钟、组间与跑步阶段计时、重量/次数/余力记录。
+- 14 个动作：13 对真人照片和 1 个真人推拳视频。新增前弓步，不将图片误标成反向弓步或后脚抬高版本。
+- 新版使用 `form-gym-v3` 存储。旧的 `form-gym-v2` 不修改；历史页可查看旧记录，导出包含两版。
+- 这是一般运动教育计划，不是远程诊断。没有上传用户私人体态照片、视频或病历。
 
-## 启动
+## 文件与运行
+`site/data.js` 保存原有动作资料；`site/plan.js` 定义新版课表与调整；`site/training.js` 为当前交互入口；`site/training.css` 为新版界面。旧 `site/app.js` 保留以供比较，但不再被页面加载。
 
 ```bash
+python3 scripts/vendor_photos.py
 python3 -m http.server 5173 --directory site
+node tests/test_program.js
+python3 tests/test_v3.py
 ```
 
-首次本地预览前请运行 `python3 scripts/vendor_photos.py` 下载真人照片（需联网）；然后打开 `http://localhost:5173`。
+浏览器测试需 Playwright 与 Chromium。默认使用离线页面装载和内存存储替身以适应受限沙箱；设置 `GYM_BASE=http://localhost:5173/` 可测试实际同源存储。生产图片与页面另行检查。
 
 ## 当前部署
+源代码在独立仓库。项目级 Pages 尚未启用，当前仍由 `EriseHe/erisehe.github.io/.github/workflows/pages.yml` 检出本仓库 `main`，运行照片打包脚本，再把 `site/` 放入 Pages 的 `/gym/`。
+更新源码后必须触发该托管工作流，不能把本仓库提交成功等同于已上线。本仓库的 Pages 工作流保留为手动入口，供之后启用独立项目 Pages。
 
-**线上地址：** https://erisehe.github.io/gym/  
-**独立源码：** https://github.com/EriseHe/gym
+## 媒体与隐私
+照片按 [Free Exercise DB](https://github.com/yuhonas/free-exercise-db) 公布的 Unlicense 使用；打包脚本下载确切的原始照片。照片与居家变式不同时有显著提示。推拳视频为 Buidhe / Wikimedia Commons，CC BY-SA 4.0。
+没有登录、分析或服务器端用户记录；导出仅由用户点击触发。原有记录不清除。照片网络回退与真人视频可能访问第三方服务器。
 
-当前通过 `EriseHe/erisehe.github.io` 的现有 GitHub Pages 工作流发布，而不是依赖本仓库尚未启用的独立 Pages 设置：
-
-1. 主站的 `.github/workflows/pages.yml` 正常构建其原有 Nextra 页面。
-2. 构建流程会额外 checkout 本仓库 `EriseHe/gym` 的 `main`。
-3. 执行 `python3 _gym_source/scripts/vendor_photos.py`，下载动作真人照片。
-4. 将本仓库 `site/` 的内容复制到主站构建产物 `out/gym/`，一并发布。
-
-这里仅共享**部署基础设施**，不共享旅行站点的设计或代码，也不改动独立的 `trip` 仓库。
-
-**之后更新 gym 源码时**，需要在 [主站 GitHub Actions](https://github.com/EriseHe/erisehe.github.io/actions/workflows/pages.yml) 手动运行 `Deploy Nextra site to Pages`，网站才会读取最新 gym 提交。本仓库的 `.github/workflows/pages.yml` 当前仅开放手动运行；等将来在本仓库 `Settings → Pages` 启用 `GitHub Actions` 构建来源后，可改回 push 自动触发，从而完全独立部署。
-
-## 图像与视频许可
-
-- 真人动作照片来自 [yuhonas/free-exercise-db](https://github.com/yuhonas/free-exercise-db)，按原项目 Unlicense 授权使用。照片使用原图库的两帧真实照片；部署工作流自动运行 `python3 scripts/vendor_photos.py`，将照片下载到 `site/photos/` 后一起发布，避免线上网站依赖第三方热链。
-- 前锯肌推拳的真人视频由 [Buidhe](https://commons.wikimedia.org/wiki/File:Serratus_punch.webm) 发布，许可 CC BY-SA 4.0。视频在页面中标注来源与许可。
-- 摄影示范与居家版本存在细微区别的动作，在动作卡的“版本提醒”中明确说明；不把其他动作照片冒充具体练习。
-- 个人姿态视频或照片**未包含**在本站或代码中。
-
-## 医疗限制
-
-网站展示保守的力量和动作控制计划，非物理治疗诊断。出现进行性无力、麻木、明显疼痛、脚尖拖地或经常绊倒时，应接受线下评估。肩胛不对称与脚部外旋的共同根源未经确认。
-
-## 代码结构
-
-- `site/index.html` — 页面布局
-- `site/styles.css` — 独立原创响应式视觉系统
-- `site/data.js` — 中文运动教学和真人照片来源配置
-- `site/app.js` — 日历、训练状态、动作详情、计时器、训练记录
-- `scripts/vendor_photos.py` — 发布前下载开放授权照片到 `site/photos/`
-- `.github/workflows/pages.yml` — GitHub Pages 自动部署
-
-本项目不使用也不引用 `EriseHe/trip` 的设计或代码。
+训练证据与适用范围在网站「计划与进阶」页列出；星期、阶段与具体剂量是本项目设计，不冒充文献验证过的个人康复处方。
