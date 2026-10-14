@@ -1,7 +1,7 @@
 name: Deploy FORM gym to GitHub Pages
+# Project-level Pages is not enabled yet; the user-site deploy workflow
+# currently publishes this independent repository at /gym/.
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
