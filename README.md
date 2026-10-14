@@ -17,13 +17,21 @@ python3 -m http.server 5173 --directory site
 
 首次本地预览前请运行 `python3 scripts/vendor_photos.py` 下载真人照片（需联网）；然后打开 `http://localhost:5173`。
 
-## 部署
+## 当前部署
 
-1. 在 GitHub 账号 `EriseHe` 下建立一个**公开、独立**的空仓库 `gym`。
-2. 将此项目所有文件推送到仓库默认分支 `main`。
-3. 到 GitHub 仓库 `Settings → Pages`，将 `Build and deployment → Source` 设为 **GitHub Actions**。
-4. 代码推送后，`.github/workflows/pages.yml` 自动发布 `site/`，预期地址 `https://erisehe.github.io/gym/`。
-5. 目前已有一个旧的 `erisehe.github.io/public/gym/` 页面。必须确认独立项目的 Pages URL 生效，再处理旧页面，避免发生 URL 竞争。**不要**直接覆盖 `trip`。
+**线上地址：** https://erisehe.github.io/gym/  
+**独立源码：** https://github.com/EriseHe/gym
+
+当前通过 `EriseHe/erisehe.github.io` 的现有 GitHub Pages 工作流发布，而不是依赖本仓库尚未启用的独立 Pages 设置：
+
+1. 主站的 `.github/workflows/pages.yml` 正常构建其原有 Nextra 页面。
+2. 构建流程会额外 checkout 本仓库 `EriseHe/gym` 的 `main`。
+3. 执行 `python3 _gym_source/scripts/vendor_photos.py`，下载动作真人照片。
+4. 将本仓库 `site/` 的内容复制到主站构建产物 `out/gym/`，一并发布。
+
+这里仅共享**部署基础设施**，不共享旅行站点的设计或代码，也不改动独立的 `trip` 仓库。
+
+**之后更新 gym 源码时**，需要在 [主站 GitHub Actions](https://github.com/EriseHe/erisehe.github.io/actions/workflows/pages.yml) 手动运行 `Deploy Nextra site to Pages`，网站才会读取最新 gym 提交。本仓库的 `.github/workflows/pages.yml` 当前仅开放手动运行；等将来在本仓库 `Settings → Pages` 启用 `GitHub Actions` 构建来源后，可改回 push 自动触发，从而完全独立部署。
 
 ## 图像与视频许可
 
